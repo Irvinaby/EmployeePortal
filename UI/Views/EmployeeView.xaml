@@ -1,0 +1,112 @@
+﻿<Window x:Class="UI.Views.EmployeeView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UI.Views"
+        xmlns:common="clr-namespace:UI.Common"
+        mc:Ignorable="d"
+        Title="EmployeeView" Height="675" Width="1200">
+    <Grid Background="#FF262626">
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
+            <common:IdToVisibleConverter x:Key="TextToVisibleConverter"/>
+            <common:IdToHiddenConverter x:Key="TextToHiddenConverter"/>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="6*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="15*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Border CornerRadius="6" BorderBrush="Gray" Grid.Row="1" Grid.Column="1"  BorderThickness="1" DockPanel.Dock="Top" Margin="0 10">
+            <Grid>
+                <StackPanel>
+                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Margin="20 0">
+                        <Button x:Name="LoadPreviousPage" Height="30" Width="30" Style="{StaticResource CustomButtonStyle}" Margin="5 10">&lt;</Button>
+                        <Button x:Name="LoadEmployeeData" Height="30" Width="80" Style="{StaticResource CustomButtonStyle}" Padding="5 5" Margin="5 10">Reload</Button>
+                        <Button x:Name="LoadNextPage" Height="30" Width="30" Style="{StaticResource CustomButtonStyle}" Margin="5 10">&gt;</Button>
+                        <!-- Circular loading animation -->
+                        <Canvas Width="32" Height="32" Margin="50 10 0 0" Visibility="{Binding Path = IsWorking, Converter={StaticResource VisibleIfTrueConverter}, FallbackValue=Hidden}">
+                            <Canvas.Triggers>
+                                <EventTrigger RoutedEvent="Canvas.Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation 
+                                                From="0" To="360" 
+                                                RepeatBehavior="Forever" 
+                                                Storyboard.TargetName="spin" 
+                                                Storyboard.TargetProperty="(RotateTransform.Angle)" 
+                                                />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Canvas.Triggers>
+                            <Canvas.RenderTransform>
+                                <RotateTransform x:Name="spin" Angle="0" CenterX="16" CenterY="16" />
+                            </Canvas.RenderTransform>
+                            <Image Source="Images\CircularLoading.png" Width="32" Height="32" />
+                        </Canvas>
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Margin="20 0">
+                        <TextBox x:Name="CurrentPage" Width="30"  Margin="5 5"></TextBox>
+                        <TextBlock Foreground="#FFB3B3B3" Width="40" Margin="5 5" x:Name="TotalPageNumber" />
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Center" Margin="0 15 280 0">
+                    <TextBlock x:Name="Status" Foreground="#FFB3B3B3" Width="200"  Margin="5 5"></TextBlock>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Right" Margin="20 0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Foreground="#FFB3B3B3" Width="40" Margin="5 10" Text="Id"></TextBlock>
+                        <TextBox Width="40" Margin="5 10" Text="{Binding EmployeeToSearch.Id}"></TextBox>
+                        <TextBlock Foreground="#FFB3B3B3" Width="40" Margin="15 10 0 10" Text="Email"></TextBlock>
+                        <TextBox Width="200" Margin="10 10" Text="{Binding EmployeeToSearch.Email}"></TextBox>
+                        <Button x:Name="SearchEmployee" Style="{StaticResource CustomButtonStyle}" Width="50" Margin="10 10">Search</Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" >
+                        <TextBlock Foreground="#FFB3B3B3" Width="40" Margin="5 10" Text="Name"></TextBlock>
+                        <TextBox Width="100" Margin="5 10" Text="{Binding EmployeeToSearch.Name}"></TextBox>
+                        <TextBlock Foreground="#FFB3B3B3" Width="40" Margin="15 10 0 0" Text="Gender"></TextBlock>
+                        <TextBox Width="50" Margin="5 10" Text="{Binding EmployeeToSearch.Gender}" />
+                        <TextBlock Foreground="#FFB3B3B3" Margin="15 10 0 0" Width="50" Text="Status"></TextBlock>
+                        <TextBox Width="65" Margin="5 10" Text="{Binding EmployeeToSearch.Status}"></TextBox>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <DataGrid Grid.Row="2" Grid.Column="1" x:Name="Employees" Background="#FF262626" AutoGenerateColumns="False" HeadersVisibility="Column"
+                  ColumnHeaderStyle="{StaticResource CustomDataGridHeaderStyle}" RowStyle="{StaticResource CustomDataGridRowStyle}"
+                  HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" BorderBrush="Gray">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="Id" Header="#" Binding="{Binding Path = Id}" Width="*" CanUserResize="False" MinWidth="25" IsReadOnly="True" />
+                <DataGridTextColumn Width="3*" Header="Name" Binding="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Width="5*" Header="Email" Binding="{Binding Path=Email, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Width="*" Header="Gender" Binding="{Binding Path=Gender, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Width="*" Header="Status" Binding="{Binding Path=Status, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTemplateColumn Width="2*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Command="{Binding Path=DataContext.AddCommand, RelativeSource= {RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}}" 
+                                        Style="{StaticResource CustomButtonStyle}"
+                                        Visibility="{Binding Path = Id, Converter={StaticResource TextToHiddenConverter}, FallbackValue=Visible}">Add</Button>
+                                <Button Command="{Binding Path=DataContext.EditCommand, RelativeSource= {RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                        Style="{StaticResource CustomButtonStyle}"
+                                        Visibility="{Binding Path = Id, Converter={StaticResource TextToVisibleConverter}, FallbackValue=Hidden}">Update</Button>
+                                <Button Command="{Binding Path=DataContext.DeleteCommand, RelativeSource= {RelativeSource FindAncestor,AncestorType={x:Type DataGrid}}}"
+                                        Style="{StaticResource CustomButtonStyle}"
+                                        Visibility="{Binding Path = Id, Converter={StaticResource TextToVisibleConverter}, FallbackValue=Hidden}">Delete</Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

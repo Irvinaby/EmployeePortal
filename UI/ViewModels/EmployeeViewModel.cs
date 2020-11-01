@@ -2,6 +2,7 @@
 using EmployeePortal.ApiHandler;
 using EmployeePortal.ApiHandler.Model;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using UI.Common;
@@ -209,9 +210,12 @@ namespace UI.ViewModels
         
         public async void EditEmployee()
         {
-            UpdateStatus("Working..", true);
-            var updateResult = await m_EmployeeHandler.UpdateEmployee(SelectedEmployee);
-            UpdateStatus(updateResult, false);
+            if(ValidateEmployee())
+            {
+                UpdateStatus("Working..", true);
+                var updateResult = await m_EmployeeHandler.UpdateEmployee(SelectedEmployee);
+                UpdateStatus(updateResult, false);
+            }
         }
 
         public async void DeleteEmployee()
@@ -223,9 +227,12 @@ namespace UI.ViewModels
 
         public async void AddEmployee()
         {
-            UpdateStatus("Adding..", true);
-            var createResult = await m_EmployeeHandler.CreateEmployee(SelectedEmployee);
-            UpdateStatus(createResult, false);
+            if(ValidateEmployee())
+            {
+                UpdateStatus("Adding..", true);
+                var createResult = await m_EmployeeHandler.CreateEmployee(SelectedEmployee);
+                UpdateStatus(createResult, false);
+            }
         }
 
         public async void SearchEmployee()
@@ -273,6 +280,42 @@ namespace UI.ViewModels
         {
             IsWorking = isWorking;
             Status = statusMessage;
+        }
+
+        private bool ValidateEmployee()
+        {
+            bool valid = true;
+            var errorMessage = new StringBuilder();
+            if(SelectedEmployee == null)
+            {
+                Status = "Please fill in the empty fields.";
+                return false;
+            }
+            if(string.IsNullOrEmpty(SelectedEmployee.Name))
+            {
+                valid = false;
+                errorMessage.Append("Employee name must be supplied. ");
+            }
+            if (string.IsNullOrEmpty(SelectedEmployee.Email))
+            {
+                valid = false;
+                errorMessage.Append("Employee email must be supplied. ");
+            }
+            if (string.IsNullOrEmpty(SelectedEmployee.Gender))
+            {
+                valid = false;
+                errorMessage.Append("Employee gender must be supplied. ");
+            }
+            if (string.IsNullOrEmpty(SelectedEmployee.Status))
+            {
+                valid = false;
+                errorMessage.Append("Employee status must be supplied. ");
+            }
+            if(!valid)
+            {
+                Status = errorMessage.ToString();
+            }
+            return valid;
         }
 
         #endregion

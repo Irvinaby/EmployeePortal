@@ -9,7 +9,8 @@ namespace UI.Utils
 {
     public class CsvReporter : ICsvReporter
     {
-        private readonly string m_CsvFileName = @"..\..\..\Reports\ExportedData_{0}.csv"; 
+        private readonly string m_ReportingDirectory = @"..\..\..\Reports";
+        private readonly string m_CsvFileName = @"ExportedData_{0}.csv"; 
 
         public string ToCsv<T>(string separator, IEnumerable<T> objectlist)
         {
@@ -49,8 +50,9 @@ namespace UI.Utils
 
         private string WriteToFile(StringBuilder stringBuilder)
         {
+            Directory.CreateDirectory(m_ReportingDirectory);
             var fileName = string.Format(m_CsvFileName, DateTime.Now.ToString("yyyyMMddHHmmssfff"));
-            File.WriteAllText(fileName, stringBuilder.ToString());
+            File.WriteAllText(Path.Combine(m_ReportingDirectory, fileName), stringBuilder.ToString());
             return Path.GetFullPath(fileName);
         }
     }

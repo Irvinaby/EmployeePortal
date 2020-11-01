@@ -6,7 +6,7 @@
         xmlns:common="clr-namespace:UI.Common"
         mc:Ignorable="d"
         Title="EmployeeView" Height="675" Width="1200">
-    <Grid Background="#FF262626">
+    <Grid Background="{StaticResource DefaultBackground}">
         <Grid.Resources>
             <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
             <common:IdToVisibleConverter x:Key="TextToVisibleConverter"/>
@@ -53,37 +53,39 @@
                         </Canvas>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Margin="20 0">
-                        <TextBlock Foreground="#FFB3B3B3" Width="40" Margin="5 5" Text="Page: " />
+                        <TextBlock Foreground="{StaticResource DefaultForeground}" Width="40" Margin="5 5" Text="Page: " />
                         <TextBox x:Name="CurrentPage" Width="30"  Margin="5 5"></TextBox>
-                        <TextBlock Foreground="#FFB3B3B3" Width="5" Margin="0 5" Text="/" />
-                        <TextBlock Foreground="#FFB3B3B3" Width="15" Margin="5 5" x:Name="TotalPageNumber" />
+                        <TextBlock Foreground="{StaticResource DefaultForeground}" Width="5" Margin="0 5" Text="/" />
+                        <TextBlock Foreground="{StaticResource DefaultForeground}" Width="15" Margin="5 5" x:Name="TotalPageNumber" />
                         <Button x:Name="ExportToCsv" Margin="20 5" Style="{StaticResource CustomButtonStyle}"
                                 IsEnabled="{Binding Path = HasDisplayedResult}">Export CSV</Button>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center" Margin="0 10 240 0" Width="300">
-                    <TextBlock x:Name="Status" TextWrapping="Wrap" Foreground="#FFB3B3B3" Margin="5 7"></TextBlock>
+                    <TextBlock x:Name="Status" TextWrapping="Wrap" Foreground="{StaticResource DefaultForeground}" Margin="5 7"></TextBlock>
                 </StackPanel>
+                <!-- Search section -->
                 <StackPanel HorizontalAlignment="Right" Margin="20 0">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Foreground="#FFB3B3B3" Width="40" Margin="5 10" Text="Id"></TextBlock>
+                        <TextBlock Foreground="{StaticResource DefaultForeground}" Width="40" Margin="5 10" Text="Id"></TextBlock>
                         <TextBox Width="40" Margin="5 10" Text="{Binding EmployeeToSearch.Id}"></TextBox>
-                        <TextBlock Foreground="#FFB3B3B3" Width="40" Margin="15 10 0 10" Text="Email"></TextBlock>
+                        <TextBlock Foreground="{StaticResource DefaultForeground}" Width="40" Margin="15 10 0 10" Text="Email"></TextBlock>
                         <TextBox Width="200" Margin="10 10" Text="{Binding EmployeeToSearch.Email}"></TextBox>
                         <Button x:Name="SearchEmployee" Style="{StaticResource CustomButtonStyle}" Width="50" Margin="10 10">Search</Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                        <TextBlock Foreground="#FFB3B3B3" Width="40" Margin="5 10" Text="Name"></TextBlock>
+                        <TextBlock Foreground="{StaticResource DefaultForeground}" Width="40" Margin="5 10" Text="Name"></TextBlock>
                         <TextBox Width="100" Margin="5 10" Text="{Binding EmployeeToSearch.Name}"></TextBox>
-                        <TextBlock Foreground="#FFB3B3B3" Width="40" Margin="15 10 0 0" Text="Gender"></TextBlock>
+                        <TextBlock Foreground="{StaticResource DefaultForeground}" Width="40" Margin="15 10 0 0" Text="Gender"></TextBlock>
                         <TextBox Width="50" Margin="5 10" Text="{Binding EmployeeToSearch.Gender}" />
-                        <TextBlock Foreground="#FFB3B3B3" Margin="15 10 0 0" Width="50" Text="Status"></TextBlock>
+                        <TextBlock Foreground="{StaticResource DefaultForeground}" Margin="15 10 0 0" Width="50" Text="Status"></TextBlock>
                         <TextBox Width="65" Margin="5 10" Text="{Binding EmployeeToSearch.Status}"></TextBox>
                     </StackPanel>
                 </StackPanel>
             </Grid>
         </Border>
-        <DataGrid Grid.Row="2" Grid.Column="1" x:Name="Employees" Background="#FF262626" AutoGenerateColumns="False" HeadersVisibility="Column"
+        <!-- Employee Grid -->
+        <DataGrid Grid.Row="2" Grid.Column="1" x:Name="Employees" Background="{StaticResource DefaultBackground}" AutoGenerateColumns="False" HeadersVisibility="Column"
                   ColumnHeaderStyle="{StaticResource CustomDataGridHeaderStyle}" RowStyle="{StaticResource CustomDataGridRowStyle}"
                   HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" BorderBrush="Gray">
             <DataGrid.Columns>

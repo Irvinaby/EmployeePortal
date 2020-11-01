@@ -1,9 +1,11 @@
 ﻿using Caliburn.Micro;
 using EmployeePortal.ApiHandler;
 using EmployeePortal.ApiHandler.Model;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using UI.Common;
+using UI.Utils;
 
 namespace UI.ViewModels
 {
@@ -13,9 +15,13 @@ namespace UI.ViewModels
 
         private bool m_IsWorking;
 
+        private bool m_HasDisplayedResults;
+
         private string m_Status;
 
         private IEmployeeHandler m_EmployeeHandler;
+
+        private ICsvReporter m_CsvReporter;
 
         private BindableCollection<Employee> m_Employees;
 
@@ -38,6 +44,16 @@ namespace UI.ViewModels
         #endregion
 
         #region Properties
+
+        public bool HasDisplayedResult
+        {
+            get => m_HasDisplayedResults;
+            set
+            {
+                m_HasDisplayedResults = value;
+                NotifyOfPropertyChange(() => HasDisplayedResult);
+            }
+        }
 
         public bool IsWorking
         {
@@ -105,6 +121,7 @@ namespace UI.ViewModels
             set
             {
                 m_Employees = value;
+                HasDisplayedResult = m_Employees.Any();
                 NotifyOfPropertyChange(() => Employees);
             }
         }
@@ -174,20 +191,22 @@ namespace UI.ViewModels
             CurrentPage = 1; //Page number starts at 1
             ApiHandler.InitializeClient();
             m_EmployeeHandler = new EmployeeHandler();
+            m_CsvReporter = new CsvReporter();
             EmployeeToSearch = new Employee();
             LoadEmployeeData();
         }
 
         //Ctor with injection for testing
-        public EmployeeViewModel(IEmployeeHandler handler)
+        public EmployeeViewModel(IEmployeeHandler handler, ICsvReporter reporter)
         {
             m_EmployeeHandler = handler;
+            m_CsvReporter = reporter;
         }
 
         #endregion
 
         #region Actions
-
+        
         public async void EditEmployee()
         {
             UpdateStatus("Working..", true);
@@ -206,7 +225,7 @@ namespace UI.ViewModels
         {
             UpdateStatus("Adding..", true);
             var createResult = await m_EmployeeHandler.CreateEmployee(SelectedEmployee);
-            UpdateStatus(createResult, true);
+            UpdateStatus(createResult, false);
         }
 
         public async void SearchEmployee()
@@ -214,7 +233,7 @@ namespace UI.ViewModels
             UpdateStatus("Loading..", true);
             var employees = await m_EmployeeHandler.SearchEmployees(EmployeeToSearch);
             Employees = new BindableCollection<Employee>(employees);
-            UpdateStatus($"Search yielded {Employees.Count} results.", true);
+            UpdateStatus($"Search yielded {Employees.Count} results.", false);
         }
 
         public async Task LoadEmployeeData()
@@ -241,10 +260,15 @@ namespace UI.ViewModels
             await LoadEmployeeData();
         }
 
+        public void ExportToCsv()
+        {
+            Status = m_CsvReporter.ToCsv(",", Employees);
+        }
+
         #endregion
 
         #region Private methods
-        
+
         private void UpdateStatus(string statusMessage, bool isWorking)
         {
             IsWorking = isWorking;

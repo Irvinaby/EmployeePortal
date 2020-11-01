@@ -15,8 +15,10 @@ namespace ApiHandler.Test
             EmployeePortal.ApiHandler.ApiHandler.InitializeClient();
         }
 
+        //TODO: Add bad weather tests
+
         [Test]
-        public async Task CRUDOperations_RoundtripTest()
+        public async Task CRUDOperations_ValidParameters_ShouldSucceed()
         {
             // Arrange
             var handler = new EmployeeHandler();

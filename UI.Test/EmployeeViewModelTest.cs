@@ -18,7 +18,7 @@ namespace UI.Test
             var employee = new Employee { Id = "1", Name = "Foo", Email = "Bar", Gender = "Male", Status = "Active" };
             var employeeHandlerMock = new Mock<IEmployeeHandler>();
             employeeHandlerMock.Setup(m => m.UpdateEmployee(It.IsAny<Employee>())).Returns(Task.FromResult("Edit successful"));
-            var viewModel = new EmployeeViewModel(employeeHandlerMock.Object);
+            var viewModel = new EmployeeViewModel(employeeHandlerMock.Object, null);
             viewModel.SelectedEmployee = employee;
 
             //Act
@@ -36,7 +36,7 @@ namespace UI.Test
             var employee = new Employee { Id = "1" };
             var employeeHandlerMock = new Mock<IEmployeeHandler>();
             employeeHandlerMock.Setup(m => m.DeleteEmployee(employee.Id)).Returns(Task.FromResult("Delete successful"));
-            var viewModel = new EmployeeViewModel(employeeHandlerMock.Object);
+            var viewModel = new EmployeeViewModel(employeeHandlerMock.Object, null);
             viewModel.SelectedEmployee = employee;
 
             //Act
@@ -54,7 +54,7 @@ namespace UI.Test
             var employee = new Employee { Id = "1", Name = "Foo", Email = "Bar", Gender = "Male", Status = "Active" };
             var employeeHandlerMock = new Mock<IEmployeeHandler>();
             employeeHandlerMock.Setup(m => m.SearchEmployees(employee)).Returns(Task.FromResult(GetStubEmployeeCollection()));
-            var viewModel = new EmployeeViewModel(employeeHandlerMock.Object);
+            var viewModel = new EmployeeViewModel(employeeHandlerMock.Object, null);
             viewModel.EmployeeToSearch = employee;
 
             //Act
@@ -73,7 +73,7 @@ namespace UI.Test
             var employees = 
             employeeHandlerMock.Setup(m => m.ListEmployees(pageNumber)).Returns(Task.FromResult((0, GetStubEmployeeCollection())));
 
-            var viewModel = new EmployeeViewModel(employeeHandlerMock.Object);
+            var viewModel = new EmployeeViewModel(employeeHandlerMock.Object, null);
             viewModel.CurrentPage = pageNumber;
 
             //Act
@@ -90,7 +90,7 @@ namespace UI.Test
             var employee = new Employee { Id = "1", Name = "Foo", Email = "Bar", Gender = "Male", Status = "Active" };
             var employeeHandlerMock = new Mock<IEmployeeHandler>();
             employeeHandlerMock.Setup(m => m.CreateEmployee(employee)).Returns(Task.FromResult("Create successful"));
-            var viewModel = new EmployeeViewModel(employeeHandlerMock.Object);
+            var viewModel = new EmployeeViewModel(employeeHandlerMock.Object, null);
             viewModel.SelectedEmployee = employee;
 
             //Act

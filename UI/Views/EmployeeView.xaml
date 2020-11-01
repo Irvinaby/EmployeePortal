@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:UI.Views"
         xmlns:common="clr-namespace:UI.Common"
         mc:Ignorable="d"
         Title="EmployeeView" Height="675" Width="1200">
@@ -32,7 +31,7 @@
                         <Button x:Name="LoadEmployeeData" Height="30" Width="80" Style="{StaticResource CustomButtonStyle}" Padding="5 5" Margin="5 10">Reload</Button>
                         <Button x:Name="LoadNextPage" Height="30" Width="30" Style="{StaticResource CustomButtonStyle}" Margin="5 10">&gt;</Button>
                         <!-- Circular loading animation -->
-                        <Canvas Width="32" Height="32" Margin="50 10 0 0" Visibility="{Binding Path = IsWorking, Converter={StaticResource VisibleIfTrueConverter}, FallbackValue=Hidden}">
+                        <Canvas Width="32" Height="32" Margin="30 16 0 0" Visibility="{Binding Path = IsWorking, Converter={StaticResource VisibleIfTrueConverter}, FallbackValue=Hidden}">
                             <Canvas.Triggers>
                                 <EventTrigger RoutedEvent="Canvas.Loaded">
                                     <BeginStoryboard>
@@ -48,18 +47,22 @@
                                 </EventTrigger>
                             </Canvas.Triggers>
                             <Canvas.RenderTransform>
-                                <RotateTransform x:Name="spin" Angle="0" CenterX="16" CenterY="16" />
+                                <RotateTransform x:Name="spin" Angle="0" CenterX="10" CenterY="10" />
                             </Canvas.RenderTransform>
-                            <Image Source="Images\CircularLoading.png" Width="32" Height="32" />
+                            <Image Source="Images\CircularLoading.png" Width="20" Height="20" />
                         </Canvas>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Margin="20 0">
+                        <TextBlock Foreground="#FFB3B3B3" Width="40" Margin="5 5" Text="Page: " />
                         <TextBox x:Name="CurrentPage" Width="30"  Margin="5 5"></TextBox>
-                        <TextBlock Foreground="#FFB3B3B3" Width="40" Margin="5 5" x:Name="TotalPageNumber" />
+                        <TextBlock Foreground="#FFB3B3B3" Width="5" Margin="0 5" Text="/" />
+                        <TextBlock Foreground="#FFB3B3B3" Width="15" Margin="5 5" x:Name="TotalPageNumber" />
+                        <Button x:Name="ExportToCsv" Margin="20 5" Style="{StaticResource CustomButtonStyle}"
+                                IsEnabled="{Binding Path = HasDisplayedResult}">Export CSV</Button>
                     </StackPanel>
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Center" Margin="0 15 280 0">
-                    <TextBlock x:Name="Status" Foreground="#FFB3B3B3" Width="200"  Margin="5 5"></TextBlock>
+                <StackPanel HorizontalAlignment="Center" Margin="0 10 240 0" Width="300">
+                    <TextBlock x:Name="Status" TextWrapping="Wrap" Foreground="#FFB3B3B3" Margin="5 7"></TextBlock>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Right" Margin="20 0">
                     <StackPanel Orientation="Horizontal">

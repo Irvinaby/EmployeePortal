@@ -44,7 +44,7 @@ namespace EmployeePortal.ApiHandler
                     else
                     {
                         var deserializedEmployees = JsonConvert.DeserializeObject<HttpResponseRoot<Employee>>(jsonString);
-                        return new List<Employee> { deserializedEmployees.Data };
+                        return deserializedEmployees.ReturnCode == (int)ApiReturnCodes.Success ? new List<Employee> { deserializedEmployees.Data } : new List<Employee>();
                     }
                 }
                 return null;

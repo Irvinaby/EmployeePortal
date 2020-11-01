@@ -79,6 +79,8 @@
     <Compile Include="Common\IdToHiddenConverter.cs" />
     <Compile Include="Common\IdToVisibilityConverter.cs" />
     <Compile Include="Common\RelayCommand.cs" />
+    <Compile Include="Utils\CsvReporter.cs" />
+    <Compile Include="Utils\ICsvReporter.cs" />
     <Compile Include="ViewModels\EmployeeViewModel.cs" />
     <Compile Include="Views\EmployeeView.xaml.cs">
       <DependentUpon>EmployeeView.xaml</DependentUpon>
@@ -135,5 +137,6 @@
   <ItemGroup>
     <Resource Include="Views\Images\CircularLoading.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
